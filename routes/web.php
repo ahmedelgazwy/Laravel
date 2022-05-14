@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\Front\FirstController;
 use App\Http\Controllers\NewsController;
+use App\Http\Controllers\SocialController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -44,10 +45,8 @@ Route::namespace('Front')->group(function (){
 Route::resource('news',NewsController::class);
 Route::get('index',[FirstController::class, 'getindex']);
 
-Auth::routes();
+Auth::routes(['verify'=>true]);
 
-Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
-
-Auth::routes();
-
-Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
+Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home') ->middleware('verified');
+Route::get('/redirect/{service}', [SocialController::class, 'redirect']);
+Route::get('/callback/{service}', [SocialController::class, 'callback']);
